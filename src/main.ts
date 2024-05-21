@@ -3,6 +3,7 @@ import {constrain} from "./Helpers";
 
 export let canvas: HTMLCanvasElement;
 export let ctx: CanvasRenderingContext2D;
+export let dotManager: DotManager;
 export let scale: number;
 
 function calcScale() {
@@ -20,8 +21,7 @@ window.onload = function () {
     canvas.height = window.innerHeight
 
     let numWanted = 200
-    const dotManager = new DotManager(numWanted)
-    console.log(dotManager.dots)
+    dotManager = new DotManager(numWanted)
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -29,6 +29,13 @@ window.onload = function () {
         dotManager.run()
         requestAnimationFrame(draw)
     }
+
+    window.addEventListener("resize", function () {
+        scale = calcScale()
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        dotManager.restart()
+    });
 
     draw()
 }

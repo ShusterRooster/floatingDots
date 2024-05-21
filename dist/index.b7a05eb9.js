@@ -588,11 +588,13 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "canvas", ()=>canvas);
 parcelHelpers.export(exports, "ctx", ()=>ctx);
+parcelHelpers.export(exports, "dotManager", ()=>dotManager);
 parcelHelpers.export(exports, "scale", ()=>scale);
 var _dotManager = require("./DotManager");
 var _helpers = require("./Helpers");
 let canvas;
 let ctx;
+let dotManager;
 let scale;
 function calcScale() {
     const width = window.innerWidth;
@@ -606,13 +608,18 @@ window.onload = function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     let numWanted = 200;
-    const dotManager = new (0, _dotManager.DotManager)(numWanted);
-    console.log(dotManager.dots);
+    dotManager = new (0, _dotManager.DotManager)(numWanted);
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         dotManager.run();
         requestAnimationFrame(draw);
     }
+    window.addEventListener("resize", function() {
+        scale = calcScale();
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        dotManager.restart();
+    });
     draw();
 };
 
@@ -621,6 +628,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DotManager", ()=>DotManager);
 var _dots = require("./Dots");
+var _main = require("./main");
 class DotManager {
     constructor(numWanted){
         this.dots = new Set();
@@ -633,8 +641,10 @@ class DotManager {
             this.dots.add(dot);
         }
     }
-    scaleDots(scale) {
-        for (const dot of this.dots)dot.radius *= scale;
+    restart() {
+        this.dots.clear();
+        (0, _main.ctx).clearRect(0, 0, (0, _main.canvas).width, (0, _main.canvas).height);
+        this.initDots();
     }
     deleteDot(dot) {
         this.dots.delete(dot);
@@ -646,7 +656,7 @@ class DotManager {
     }
 }
 
-},{"./Dots":"1gsnI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1gsnI":[function(require,module,exports) {
+},{"./Dots":"1gsnI","./main":"jeorp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1gsnI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Dot", ()=>Dot);

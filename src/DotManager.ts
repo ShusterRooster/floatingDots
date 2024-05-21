@@ -1,4 +1,5 @@
 import {Dot} from "./Dots";
+import {canvas, ctx} from "./main";
 
 export class DotManager {
     dots = new Set<Dot>()
@@ -16,10 +17,10 @@ export class DotManager {
         }
     }
 
-    scaleDots(scale: number) {
-        for (const dot of this.dots) {
-            dot.radius *= scale
-        }
+    restart() {
+        this.dots.clear()
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.initDots()
     }
 
     deleteDot(dot: Dot) {
