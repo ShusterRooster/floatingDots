@@ -1,4 +1,4 @@
-export const minGray: number = 90
+export const minGray: number = 180
 export const minSpeed: number = 0.1
 export const maxSpeed: number = 2
 
