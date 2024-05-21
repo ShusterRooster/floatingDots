@@ -17,6 +17,8 @@ window.onload = function () {
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     scale = calcScale()
 
+    let prevHeight = window.innerHeight
+
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -31,10 +33,16 @@ window.onload = function () {
     }
 
     window.addEventListener("resize", function () {
-        scale = calcScale()
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        dotManager.restart()
+        const curHeight = window.innerHeight
+
+        if(Math.abs(curHeight - prevHeight) >= 200) {
+            scale = calcScale()
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+            dotManager.restart()
+        }
+
+        prevHeight = curHeight
     });
 
     draw()
