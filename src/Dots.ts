@@ -30,6 +30,7 @@ export class Dot {
         this.speed = this.calcSpeed()
 
         this.radius *= scale
+        this.speed *= scale
     }
 
     calcSpeed() {

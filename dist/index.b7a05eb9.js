@@ -666,6 +666,7 @@ class Dot {
         this.color = color || this.generateGray();
         this.speed = this.calcSpeed();
         this.radius *= (0, _main.scale);
+        this.speed *= (0, _main.scale);
     }
     calcSpeed() {
         return (0, _helpers.map)(this.radius, (0, _settings.minRadius), (0, _settings.maxRadius), (0, _settings.maxSpeed), (0, _settings.minSpeed));
