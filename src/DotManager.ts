@@ -16,6 +16,12 @@ export class DotManager {
         }
     }
 
+    scaleDots(scale: number) {
+        for (const dot of this.dots) {
+            dot.radius *= scale
+        }
+    }
+
     deleteDot(dot: Dot) {
         this.dots.delete(dot)
         const newDot = new Dot(this)

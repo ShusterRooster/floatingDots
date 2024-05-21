@@ -588,12 +588,21 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "canvas", ()=>canvas);
 parcelHelpers.export(exports, "ctx", ()=>ctx);
+parcelHelpers.export(exports, "scale", ()=>scale);
 var _dotManager = require("./DotManager");
+var _helpers = require("./Helpers");
 let canvas;
 let ctx;
+let scale;
+function calcScale() {
+    const width = window.innerWidth;
+    const maxRes = 2000;
+    return (0, _helpers.constrain)(width / maxRes, 0.1, 1);
+}
 window.onload = function() {
     canvas = document.getElementById("dotsCanvas");
     ctx = canvas.getContext("2d");
+    scale = calcScale();
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     let numWanted = 200;
@@ -607,7 +616,7 @@ window.onload = function() {
     draw();
 };
 
-},{"./DotManager":"axmxj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"axmxj":[function(require,module,exports) {
+},{"./DotManager":"axmxj","./Helpers":"25CX2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"axmxj":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DotManager", ()=>DotManager);
@@ -623,6 +632,9 @@ class DotManager {
             const dot = new (0, _dots.Dot)(this);
             this.dots.add(dot);
         }
+    }
+    scaleDots(scale) {
+        for (const dot of this.dots)dot.radius *= scale;
     }
     deleteDot(dot) {
         this.dots.delete(dot);
@@ -653,6 +665,7 @@ class Dot {
         this.radius = radius || (0, _helpers.random)((0, _settings.minRadius), (0, _settings.maxRadius));
         this.color = color || this.generateGray();
         this.speed = this.calcSpeed();
+        this.radius *= (0, _main.scale);
     }
     calcSpeed() {
         return (0, _helpers.map)(this.radius, (0, _settings.minRadius), (0, _settings.maxRadius), (0, _settings.maxSpeed), (0, _settings.minSpeed));
@@ -672,12 +685,6 @@ class Dot {
         this.fadeDirection = -1;
         if (this.alpha <= 0) this.manager.deleteDot(this);
     }
-    fadeOut() {
-        this.fading = false;
-        this.fadeDirection = -1;
-        while(this.alpha > -0.5)this.alpha -= this.fadeSpeed;
-        return true;
-    }
     run() {
         if (this.fading) {
             this.alpha += this.fadeSpeed * this.fadeDirection;
@@ -690,7 +697,7 @@ class Dot {
     }
 }
 
-},{"../Settings":"kaKrz","./Helpers":"25CX2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./main":"jeorp"}],"kaKrz":[function(require,module,exports) {
+},{"../Settings":"kaKrz","./Helpers":"25CX2","./main":"jeorp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kaKrz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "minGray", ()=>minGray);

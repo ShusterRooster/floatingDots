@@ -1,7 +1,7 @@
 import {maxFadeSpeed, maxRadius, maxSpeed, minFadeSpeed, minGray, minRadius, minSpeed} from "../Settings";
 import {constrain, map, random} from "./Helpers";
 import {DotManager} from "./DotManager";
-import {canvas, ctx} from "./main";
+import {canvas, ctx, scale} from "./main";
 
 export class Dot {
     manager: DotManager;
@@ -28,6 +28,8 @@ export class Dot {
         this.radius = radius || random(minRadius, maxRadius)
         this.color = color || this.generateGray()
         this.speed = this.calcSpeed()
+
+        this.radius *= scale
     }
 
     calcSpeed() {
@@ -53,17 +55,6 @@ export class Dot {
         if(this.alpha <= 0) {
             this.manager.deleteDot(this)
         }
-    }
-
-    fadeOut() {
-        this.fading = false
-        this.fadeDirection = -1
-
-        while(this.alpha > -0.5) {
-            this.alpha -= this.fadeSpeed
-        }
-
-        return true
     }
 
     run() {
